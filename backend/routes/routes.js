@@ -14,13 +14,10 @@ router.route("/create-categories").post((req, res) => {
       });
       sub
         .save()
-        .then((res) => {
-          console.log(res.data);
-        })
+        .then((res) => {})
         .catch((error) => {
-          console.log(error);
+          res.status(400).send(error);
         });
-      console.log(req.body);
     })
     .catch((error) => {
       res.status(400).send("something went wrong");
@@ -45,12 +42,9 @@ router.route("/get-subCategories/:id").get((req, res) => {
 
     (error, data) => {
       if (error) {
-        res.send("it's here");
-        console.log("please");
-        console.log(error);
+        res.send(error);
       } else {
         res.json(data);
-        console.log("!");
       }
     }
   );
@@ -66,12 +60,9 @@ router.route("/update-subCategories/:id").post((req, res) => {
     },
     (error, data) => {
       if (error) {
-        console.log(error);
+        res.send(error);
       } else {
         res.json(req.body);
-        console.log(data);
-
-        console.log("added!");
       }
     }
   );

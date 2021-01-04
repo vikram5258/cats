@@ -6,17 +6,24 @@ function Cat() {
   const [cat, setCat] = useState(false);
   const [categories, setCategories] = useState({ name: "", status: "active" });
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios
-      .post("http://localhost:5000/get-categories")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.log(error, "axios");
-      });
-    return () => {};
-  }, []);
+    if (loading) {
+      async function fetch() {
+        await axios
+          .post("http://localhost:5000/get-categories")
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((error) => {
+            console.log(error, "axios");
+          });
+        return () => {};
+      }
+      fetch();
+      setLoading(false);
+    }
+  }, [data, loading]);
 
   function handleButton() {
     setCat(!cat);
@@ -25,15 +32,10 @@ function Cat() {
     axios
       .post("http://localhost:5000/create-categories", categories)
       .then((res) => {
-        axios
-          .post("http://localhost:5000/get-categories")
-          .then((res) => {
-            setData(res.data);
-          })
-          .catch((error) => {
-            console.log(error, "axios");
-          });
-        console.log(data, "hi");
+        setLoading(true);
+      })
+      .catch((error) => {
+        console.log(error);
       });
     console.log("axios", categories);
     setCat(!cat);

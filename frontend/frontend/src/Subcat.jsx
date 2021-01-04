@@ -8,30 +8,37 @@ function Subcat() {
   const [data, setData] = useState({});
   const id = location.pathname.split(":")[1];
   const [sub, setSub] = useState("");
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const get = `http://localhost:5000/get-subCategories/${id}`;
-    axios
-      .get(get)
-      .then((res) => {
-        setData(res.data);
-        console.log(data.subcategories, "setdata");
-      })
-      .catch((error) => {
-        console.log(error, "axios");
-      });
-    return () => {};
-  }, []);
+    if (loading) {
+      async function fetch() {
+        await axios
+          .get(`http://localhost:5000/get-subCategories/${id}`)
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((error) => {
+            console.log(error, "axios");
+          });
+        return () => {};
+      }
+      fetch();
+      setLoading(false);
+    }
+  }, [data, id, loading]);
   function handleChange(event) {
     setSub(event.target.value);
   }
-  function handleSave() {
+  async function handleSave() {
     //update-subCategories
     console.log(sub, "sub save");
 
-    axios
+    await axios
       .post(`http://localhost:5000/update-subCategories/${id}`, { sub: sub })
       .then((res) => {})
       .catch((error) => {});
+    setLoading(false);
   }
   return (
     <div>
