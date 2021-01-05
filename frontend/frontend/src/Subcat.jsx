@@ -26,29 +26,32 @@ function Subcat() {
       fetch();
       setLoading(false);
     }
-  }, [data, id, loading]);
+  }, [id, loading]);
   function handleChange(event) {
     setSub(event.target.value);
   }
+
   async function handleSave() {
     //update-subCategories
     console.log(sub, "sub save");
 
     await axios
       .post(`http://localhost:5000/update-subCategories/${id}`, { sub: sub })
-      .then((res) => {})
+      .then((res) => {
+        setLoading(true);
+        setAdd(!add);
+      })
       .catch((error) => {});
-    setLoading(false);
   }
+
   return (
     <div>
       <div className="add_sub">
         <button onClick={() => setAdd(!add)}>add sub</button>
         {add ? (
           <div className="div">
-            {" "}
             <label htmlFor="sub"> add sub category </label>
-            <input type="text" name="sub" onChange={handleChange} id="" />
+            <input type="text" name="sub" onChange={handleChange} />
             <button onClick={handleSave}>Save</button>
           </div>
         ) : null}
