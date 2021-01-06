@@ -3,25 +3,32 @@ const router = express.Router();
 const categories = require("../models/model");
 const subcategories = require("../models/sub");
 
-router.route("/create-categories").post((req, res) => {
+router.route("/create-categories").post(async (req, res) => {
+  let id = "";
   const cat = new categories(req.body);
-  cat
-    .save()
-    .then((res) => {
+  await cat.save((error, user) => {
+    if (user) {
+      id = user._id;
+      console.log(id, "id");
+      console.log(req.body.option, "options");
+
       const sub = new subcategories({
-        cat_id: res.data._id,
+        cat_id: id,
         name: [],
+        option: req.body.option,
       });
-      sub
-        .save()
-        .then((res) => {})
-        .catch((error) => {
-          res.status(400).send(error);
-        });
-    })
-    .catch((error) => {
-      res.status(400).send("something went wrong");
-    });
+      sub.save((error, user) => {
+        if (user) {
+          console.log("success");
+        } else if (error) {
+          console.log("error");
+        }
+      });
+    } else if (error) {
+      console.log("something went wrong");
+    }
+  });
+
   res.status(200).send("success");
 });
 
@@ -37,8 +44,8 @@ router.route("/get-categories/").post((req, res) => {
 });
 
 router.route("/get-subCategories/:id").get((req, res) => {
-  categories.findOne(
-    { _id: req.params.id },
+  subcategories.findOne(
+    { cat_id: req.params.id },
 
     (error, data) => {
       if (error) {
