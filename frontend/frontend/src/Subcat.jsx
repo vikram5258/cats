@@ -38,22 +38,20 @@ function Subcat() {
       setLoading(false);
     }
   }, [data, id, loading]);
+
   function handleChange(event) {
     setSub(event.target.value);
   }
-  console.log(option, "data");
 
   function handleCheck(event) {
-    console.log("hi");
-    console.log(event.target, "target");
     const { name, checked } = event.target;
 
     setOption((option) => ({
       ...option,
       [name]: checked,
     }));
-    console.log(data, "data");
   }
+  console.log(option, "options");
 
   async function handleSave() {
     //update-subCategories
@@ -80,51 +78,54 @@ function Subcat() {
           </div>
         ) : null}
       </div>
-
-      <div>
-        <label htmlFor="option1"> Option 1</label>
-        {"      "}
-        <input
-          type="checkbox"
-          name="option1"
-          value={option1}
-          onChange={handleCheck}
-          id=""
-        />
-      </div>
-      <div>
-        <label htmlFor="option2"> Option 2</label>
-        {"      "}
-        <input
-          type="checkbox"
-          name="option2"
-          value={option2}
-          onChange={handleCheck}
-          id=""
-        />
-      </div>
-      <div>
-        <label htmlFor="option3"> Option 3</label>
-        {"      "}
-        <input
-          type="checkbox"
-          name="option3"
-          value={option3}
-          onChange={handleCheck}
-          id=""
-        />
-      </div>
-      <div>
-        <label htmlFor="option4"> Option 4</label>
-        {"      "}
-        <input
-          type="checkbox"
-          name="option4"
-          value={option4}
-          onChange={handleCheck}
-          id=""
-        />
-      </div>
+      {!loading ? (
+        <div>
+          <div>
+            <label htmlFor="option1"> Option 1</label>
+            {"      "}
+            <input
+              type="checkbox"
+              name="option1"
+              value={option1}
+              onChange={handleCheck}
+              id=""
+            />
+          </div>
+          <div>
+            <label htmlFor="option2"> Option 2</label>
+            {"      "}
+            <input
+              type="checkbox"
+              name="option2"
+              value={option2}
+              onChange={handleCheck}
+              id=""
+            />
+          </div>
+          <div>
+            <label htmlFor="option3"> Option 3</label>
+            {"      "}
+            <input
+              type="checkbox"
+              name="option3"
+              value={option3}
+              onChange={handleCheck}
+              id=""
+            />
+          </div>
+          <div>
+            <label htmlFor="option4"> Option 4</label>
+            {"      "}
+            <input
+              type="checkbox"
+              name="option4"
+              value={option4}
+              onChange={handleCheck}
+              id=""
+            />
+          </div>
+        </div>
+      ) : null}
       {data.subcategories ? (
         <div>
           <table>
